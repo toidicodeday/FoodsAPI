@@ -7,38 +7,38 @@ namespace SampleWebApiAspNetCore.Repositories
 {
     public class FoodSqlRepository : IFoodRepository
     {
-        private readonly FoodDbContext _foodDbContext;
+        private readonly MyDbContext _foodDbContext;
 
-        public FoodSqlRepository(FoodDbContext foodDbContext)
+        public FoodSqlRepository(MyDbContext foodDbContext)
         {
             _foodDbContext = foodDbContext;
         }
 
         public FoodEntity GetSingle(int id)
         {
-            return _foodDbContext.FoodItems.FirstOrDefault(x => x.Id == id);
+            return _foodDbContext.Foods.FirstOrDefault(x => x.Id == id);
         }
 
         public void Add(FoodEntity item)
         {
-            _foodDbContext.FoodItems.Add(item);
+            _foodDbContext.Foods.Add(item);
         }
 
         public void Delete(int id)
         {
             FoodEntity foodItem = GetSingle(id);
-            _foodDbContext.FoodItems.Remove(foodItem);
+            _foodDbContext.Foods.Remove(foodItem);
         }
 
         public FoodEntity Update(int id, FoodEntity item)
         {
-            _foodDbContext.FoodItems.Update(item);
+            _foodDbContext.Foods.Update(item);
             return item;
         }
 
         public IQueryable<FoodEntity> GetAll(QueryParameters queryParameters)
         {
-            IQueryable<FoodEntity> _allItems = _foodDbContext.FoodItems.OrderBy(queryParameters.OrderBy,
+            IQueryable<FoodEntity> _allItems = _foodDbContext.Foods.OrderBy(queryParameters.OrderBy,
               queryParameters.IsDescending());
 
             if (queryParameters.HasQuery())
@@ -55,7 +55,7 @@ namespace SampleWebApiAspNetCore.Repositories
 
         public int Count()
         {
-            return _foodDbContext.FoodItems.Count();
+            return _foodDbContext.Foods.Count();
         }
 
         public bool Save()
@@ -76,7 +76,7 @@ namespace SampleWebApiAspNetCore.Repositories
 
         private FoodEntity GetRandomItem(string type)
         {
-            return _foodDbContext.FoodItems
+            return _foodDbContext.Foods
                 .Where(x => x.Type == type)
                 .OrderBy(o => Guid.NewGuid())
                 .FirstOrDefault();

@@ -8,9 +8,11 @@ using SampleWebApiAspNetCore.Services;
 using SampleWebApiAspNetCore.Models;
 using SampleWebApiAspNetCore.Repositories;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SampleWebApiAspNetCore.Controllers.v1
 {
+    [Authorize]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -46,7 +48,7 @@ namespace SampleWebApiAspNetCore.Controllers.v1
             };
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
-
+         
             var links = _linkService.CreateLinksForCollection(queryParameters, allItemCount, version);
             var toReturn = foodItems.Select(x => _linkService.ExpandSingleFoodItem(x, x.Id, version));
 
